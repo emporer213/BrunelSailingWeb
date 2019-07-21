@@ -10,15 +10,15 @@ using Brunel_Sailing_Web.Models;
 
 namespace Brunel_Sailing_Web.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/users")]
     [ApiController]
     public class UsersController : ControllerBase
     {
-        private readonly ApplicationContext _context;
+        private IRepositoryWrapper _repoWrapper;
 
-        public UsersController(ApplicationContext context)
+        public UsersController(IRepositoryWrapper repoWrapper)
         {
-            _context = context;
+            _repoWrapper = repoWrapper;
         }
 
         // GET: api/Users
