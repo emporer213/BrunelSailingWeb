@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Brunel_Sailing_Web.Data;
 using Brunel_Sailing_Web.Models;
+using Brunel_Sailing_Web.Services;
 
 namespace Brunel_Sailing_Web.Controllers
 {
@@ -14,33 +15,57 @@ namespace Brunel_Sailing_Web.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
+        private ILoggerManager _logger;
         private IRepositoryWrapper _repoWrapper;
 
-        public UsersController(IRepositoryWrapper repoWrapper)
+        public UsersController(ILoggerManager logger,IRepositoryWrapper repoWrapper)
         {
+            _logger = logger;
             _repoWrapper = repoWrapper;
         }
 
         // GET: api/Users
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<User>>> GetAllUsers()
         {
-            return await _context.Users.ToListAsync();
+            try
+            {
+                var users = await _repoWrapper.User.GetAllUsersAsync();
+                return Ok(users);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Some error in the GetAllOwnsers method: {ex}");
+                return StatusCode(500, "Internal server eroor");
+            }
         }
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<User>> GetUserById(Guid id)
         {
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
+            try
             {
-                return NotFound();
-            }
+                var user = await _repoWrapper.User.GetUserByIdAsync(id);
 
-            return user;
+                if (user.IsEmptyObject())
+                {
+                    _logger.LogError($"User with id: {id}, hasn't been found in db.");
+                    return NotFound();
+                }
+                else
+                {
+                    _logger.LogInfo($"Returned owner with id: {id}");
+                    return Ok(user);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"Something went wrong inside GetUserById action: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
         }
+       
 
         // PUT: api/Users/5
         [HttpPut("{id}")]

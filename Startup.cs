@@ -1,5 +1,5 @@
 using Brunel_Sailing_Web.Data;
-using Brunel_Sailing_Web.Extentions;
+using Brunel_Sailing_Web.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;

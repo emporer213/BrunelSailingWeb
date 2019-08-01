@@ -15,14 +15,16 @@ namespace Brunel_Sailing_Web.Repositories
 
         }
 
-        public Task CreateUserAsync(User user)
+        public async Task CreateUserAsync(User user)
         {
-            throw new NotImplementedException();
+            Create(user);
+            await SaveAsync();
         }
 
-        public Task DeleteUserAsync(User user)
+        public async Task DeleteUserAsync(User user)
         {
-            throw new NotImplementedException();
+            Delete(user);
+            await SaveAsync();
         }
 
         public async Task<IEnumerable<User>> GetAllUsersAsync()
@@ -35,9 +37,11 @@ namespace Brunel_Sailing_Web.Repositories
             return await FindByCondition(u => u.UserId.Equals(id)).DefaultIfEmpty(new User()).SingleAsync();
         }
 
-        public Task UpdateUserAsync(User dbUser, User user)
+        public async Task UpdateUserAsync(User dbUser, User user)
         {
-            throw new NotImplementedException();
+            dbUser.Map(user);
+            Update(dbUser);
+            await SaveAsync();
         }
     }
         

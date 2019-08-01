@@ -13,5 +13,30 @@ namespace Brunel_Sailing_Web.Repositories
         {
 
         }
+
+        public Task CreateEventAsync(Event cEvent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteEventAsync(Event dEvent)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IEnumerable<Event>> GetAllEventsAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<Event> GetEventByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task UpdateEventAsync(Event uEvent)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
