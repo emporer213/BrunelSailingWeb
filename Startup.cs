@@ -1,5 +1,6 @@
 using Brunel_Sailing_Web.Data;
-using Brunel_Sailing_Web.Extensions;
+using Brunel_Sailing_Web.Extentions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -10,6 +11,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using System.IO;
+using System;
+using AutoMapper;
+using Brunel_Sailing_Web.Models.MappingProfiles;
 
 namespace Brunel_Sailing_Web
 {
@@ -31,7 +35,20 @@ namespace Brunel_Sailing_Web
             services.ConfigureCors();
             services.ConfigureIISIntegration();
             services.ConfigureLoggerService();
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.Authority = "Provider end point";
+                options.Audience = " application if or uri as identifier";
+                options.TokenValidationParameters.ValidateLifetime = true;
+                options.TokenValidationParameters.ClockSkew = TimeSpan.FromMinutes(5);
+            });
+            services.AddAutoMapper(typeof(UserMapping));
             services.ConfigureRepositoryWrapper();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // In production, the Angular files will be served from this directory

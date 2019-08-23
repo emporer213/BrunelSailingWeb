@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Brunel_Sailing_Web.Data;
+using Brunel_Sailing_Web.Extentions;
 using Brunel_Sailing_Web.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -32,7 +33,7 @@ namespace Brunel_Sailing_Web.Repositories
             return await FindAll().OrderBy(x => x.FirstName).ToListAsync();
         }
 
-        public async Task<User> GetUserByIdAsync(int id)
+        public async Task<User> GetUserByIdAsync(Guid id)
         {
             return await FindByCondition(u => u.UserId.Equals(id)).DefaultIfEmpty(new User()).SingleAsync();
         }

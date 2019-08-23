@@ -69,14 +69,14 @@ namespace Brunel_Sailing_Web.Controllers
 
         // PUT: api/Users/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int id, User user)
+        public async Task<IActionResult> PutUser(Guid id, User user)
         {
             if (id != user.UserId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            _repoWrapper.Entry(user).State = EntityState.Modified;
 
             try
             {
@@ -123,7 +123,7 @@ namespace Brunel_Sailing_Web.Controllers
             return user;
         }
 
-        private bool UserExists(int id)
+        private bool UserExists(Guid id)
         {
             return _context.Users.Any(e => e.UserId == id);
         }
